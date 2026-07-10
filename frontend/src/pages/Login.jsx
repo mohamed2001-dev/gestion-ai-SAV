@@ -5,109 +5,109 @@ import api from "../api/axios";
 // Reference number shown on the ticket header — purely cosmetic,
 // evokes the "Bon d'intervention" the technicians fill out every day.
 function useTicketRef() {
-  const [ref] = useState(() => {
+    const [ref] = useState(() => {
     const now = new Date();
     const y = now.getFullYear();
     const rand = Math.floor(1000 + Math.random() * 9000);
     return `BI-${y}-${rand}`;
-  });
-  return ref;
+    });
+    return ref;
 }
 
 function EyeIcon({ open }) {
-  return open ? (
+    return open ? (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  ) : (
+    ) : (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M3 3l18 18M10.6 10.7a3 3 0 0 0 4.2 4.2M6.7 6.9C4.3 8.3 2.6 10.4 1 12c0 0 4 7 11 7 2 0 3.7-.5 5.1-1.2M9.9 4.2A11.5 11.5 0 0 1 12 5c7 0 11 7 11 7-.6 1-1.4 2.1-2.4 3.1" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M3 3l18 18M10.6 10.7a3 3 0 0 0 4.2 4.2M6.7 6.9C4.3 8.3 2.6 10.4 1 12c0 0 4 7 11 7 2 0 3.7-.5 5.1-1.2M9.9 4.2A11.5 11.5 0 0 1 12 5c7 0 11 7 11 7-.6 1-1.4 2.1-2.4 3.1" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
+    );
 }
 
 export default function Login() {
-  const navigate = useNavigate();
-  const ticketRef = useTicketRef();
+    const navigate = useNavigate();
+    const ticketRef = useTicketRef();
 
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+    const [form, setForm] = useState({ email: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    };
 
-  const handleLogin = async (e) => {
+    const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const response = await api.post("/login", form);
+        const response = await api.post("/login", form);
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      const role = response.data.user.role;
+        const role = response.data.user.role;
 
-      if (role === "admin") {
+        if (role === "admin") {
         navigate("/admin/dashboard");
-      } else {
+        } else {
         navigate("/technician/dashboard");
-      }
+        }
     } catch (err) {
-      if (err.response?.data?.message) {
+        if (err.response?.data?.message) {
         setError(err.response.data.message);
-      } else {
+        } else {
         setError("Une erreur est survenue. Veuillez réessayer.");
-      }
+        }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+    };
 
-  const today = new Date().toLocaleDateString("fr-FR", {
+    const today = new Date().toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  });
+    });
 
-  return (
+    return (
     <div className="min-h-screen flex bg-[#F6F7F5]">
-      <style>{`
+        <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap');
         .font-display { font-family: 'Space Grotesk', sans-serif; }
         .font-body { font-family: 'Inter', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-      `}</style>
+        `}</style>
 
       {/* LEFT — brand panel */}
-      <div className="hidden lg:flex lg:w-[46%] relative bg-[#101826] text-white flex-col justify-between overflow-hidden">
+        <div className="hidden lg:flex lg:w-[46%] relative bg-[#101826] text-white flex-col justify-between overflow-hidden">
         {/* blueprint dot-grid backdrop */}
         <div
-          className="absolute inset-0 opacity-[0.12]"
-          style={{
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
             backgroundImage: "radial-gradient(#8fa3b8 1px, transparent 1px)",
             backgroundSize: "22px 22px",
-          }}
+            }}
         />
         <div
-          className="absolute -bottom-32 -right-24 w-96 h-96 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, #FF7A29 0%, transparent 70%)" }}
+            className="absolute -bottom-32 -right-24 w-96 h-96 rounded-full opacity-20"
+            style={{ background: "radial-gradient(circle, #FF7A29 0%, transparent 70%)" }}
         />
 
         <div className="relative z-10 px-12 pt-12">
-          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-md bg-[#FF7A29] flex items-center justify-center font-display font-bold text-[#101826]">
-              D
+                D
             </div>
             <span className="font-display font-semibold tracking-wide text-lg">
-              DEWEB <span className="text-[#8fa3b8] font-normal">TECHNOLOGY</span>
+                DEWEB <span className="text-[#8fa3b8] font-normal">TECHNOLOGY</span>
             </span>
-          </div>
+            </div>
         </div>
 
         <div className="relative z-10 px-12">
@@ -185,7 +185,7 @@ export default function Login() {
                   required
                   autoComplete="email"
                   className="w-full font-body rounded-lg border border-[#DADDD6] bg-[#FCFCFB] px-3.5 py-2.5 text-[#101826] placeholder:text-[#a5aeb8] outline-none transition focus:border-[#0E7C86] focus:ring-2 focus:ring-[#0E7C86]/15"
-                  placeholder="prenom.nom@deweb-technology.com"
+                  placeholder="email"
                 />
               </div>
 
